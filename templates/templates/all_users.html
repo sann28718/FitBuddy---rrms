@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        FitBuddy - Admin Dashboard
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', path='css/style.css') }}"
+    >
+
+</head>
+
+
+<body>
+
+<header class="topbar">
+
+    <div class="brand">
+
+        <span class="brand-icon">
+            💪
+        </span>
+
+        <span>
+            FitBuddy
+        </span>
+
+    </div>
+
+
+    <nav>
+
+        <a href="/">
+            Home
+        </a>
+
+        <a href="/view-all-users">
+            Dashboard
+        </a>
+
+        <a href="/docs">
+            API Docs
+        </a>
+
+    </nav>
+
+</header>
+
+
+<main class="admin-container">
+
+
+    <section class="page-heading">
+
+        <p class="eyebrow">
+            ADMIN DASHBOARD
+        </p>
+
+        <h1>
+            All Users & Fitness Plans
+        </h1>
+
+        <p>
+            Review registered users and their generated plans.
+        </p>
+
+    </section>
+
+
+    {% if users %}
+
+    <div class="admin-table-wrapper">
+
+        <table class="admin-table">
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        User
+                    </th>
+
+                    <th>
+                        Details
+                    </th>
+
+                    <th>
+                        Goal
+                    </th>
+
+                    <th>
+                        Intensity
+                    </th>
+
+                    <th>
+                        Original Plan
+                    </th>
+
+                    <th>
+                        Updated Plan
+                    </th>
+
+                    <th>
+                        Action
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                {% for user in users %}
+
+                <tr>
+
+                    <td>
+
+                        <strong>
+                            {{ user.username }}
+                        </strong>
+
+                        <br>
+
+                        <small>
+                            ID: {{ user.user_id }}
+                        </small>
+
+                    </td>
+
+
+                    <td>
+
+                        Age:
+                        {{ user.age }}
+
+                        <br>
+
+                        Weight:
+                        {{ user.weight }} kg
+
+                    </td>
+
+
+                    <td>
+                        {{ user.goal.title() }}
+                    </td>
+
+
+                    <td>
+
+                        <span class="badge">
+
+                            {{ user.intensity.title() }}
+
+                        </span>
+
+                    </td>
+
+
+                    <td>
+
+                        <details>
+
+                            <summary>
+                                View Original
+                            </summary>
+
+                            <pre class="small-plan">{{ user.original_plan }}</pre>
+
+                        </details>
+
+                    </td>
+
+
+                    <td>
+
+                        {% if user.updated_plan %}
+
+                        <details>
+
+                            <summary>
+                                View Updated
+                            </summary>
+
+                            <pre class="small-plan">{{ user.updated_plan }}</pre>
+
+                        </details>
+
+                        {% else %}
+
+                        <span class="muted">
+                            No update yet
+                        </span>
+
+                        {% endif %}
+
+                    </td>
+
+
+                    <td>
+
+                        <form
+                            action="/delete-user/{{ user.user_id }}"
+                            method="post"
+                            onsubmit="return confirm('Delete this user and their plans?');"
+                        >
+
+                            <button
+                                type="submit"
+                                class="delete-button"
+                            >
+                                Delete
+                            </button>
+
+                        </form>
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+
+    {% else %}
+
+    <div class="empty-state">
+
+        <div class="empty-icon">
+            👤
+        </div>
+
+        <h2>
+            No Users Yet
+        </h2>
+
+        <p>
+            Generate your first FitBuddy plan
+            to see a user here.
+        </p>
+
+        <a
+            href="/"
+            class="primary-button inline-button"
+        >
+            Create First Plan
+        </a>
+
+    </div>
+
+    {% endif %}
+
+
+</main>
+
+
+<footer>
+
+    <p>
+        FitBuddy • Admin Dashboard
+    </p>
+
+</footer>
+
+
+</body>
+
+</html>
